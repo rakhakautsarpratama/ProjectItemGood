@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Item Good - Game Top Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+    .font-game { font-family: 'Orbitron', sans-serif; }
+ 
+    /* Page system */
+    .page { display: none; min-height: 100vh; }
+    .page.active { display: flex; flex-direction: column; }
+ 
+    /* Sky gradient background */
+    .sky-bg {
+      background: linear-gradient(160deg, #cffafe 0%, #a5f3fc 35%, #7dd3fc 70%, #38bdf8 100%);
+    }
+
+    .split-layout {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      min-height: 100vh;
+    }
+    .split-left {
+      background: linear-gradient(160deg, #e0f7ff 0%, #b3eef9 60%, #7dd3fc 100%);
+      padding: 36px 52px;
+      position: relative;
+    }
+    .split-right {
+      background: linear-gradient(180deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%);
+    }
+ 
+    /* Inputs */
+    .field-input {
+      width: 100%;
+      background: white;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-family: 'Poppins', sans-serif;
+      color: #0c4a6e;
+      outline: none;
+      box-shadow: 0 1px 4px rgba(14,165,233,0.10);
+      transition: box-shadow 0.2s;
+    }
+    .field-input:focus { box-shadow: 0 0 0 2px #38bdf8; }
+    .field-input::placeholder { color: #94a3b8; font-size: 12px; }
+ 
+    .field-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #0c4a6e;
+      margin-bottom: 4px;
+      display: block;
+    }
+ 
+    /* Buttons */
+    .btn-white {
+      width: 100%;
+      background: white;
+      border: none;
+      border-radius: 50px;
+      padding: 11px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0284c7;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: 'Poppins', sans-serif;
+    }
+    .btn-white:hover { opacity: 0.92; transform: scale(1.01); }
+ 
+    .btn-outline {
+      width: 100%;
+      background: transparent;
+      border: 1.5px solid white;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: 'background' 0.2s;
+      font-family: 'Poppins', sans-serif;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.15); }
+ 
+    .btn-cyan-solid {
+      background: linear-gradient(90deg, #06b6d4, #0284c7);
+      border: none;
+      border-radius: 50px;
+      padding: 11px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      transition: opacity 0.2s;
+    }
+    .btn-cyan-solid:hover { opacity: 0.9; }
+ 
+    /* Top bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0284c7;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    .back-btn:hover { color: #0369a1; }
+    .brand-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0284c7;
+      background: white;
+      padding: 4px 14px;
+      border-radius: 50px;
+      box-shadow: 0 1px 6px rgba(14,165,233,0.15);
+    }
+ 
+    /* OTP inputs */
+    .otp-input {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0284c7;
+      outline: none;
+      box-shadow: 0 2px 8px rgba(14,165,233,0.15);
+      font-family: 'Poppins', sans-serif;
+    }
+
+
+
+    .otp-input:focus { box-shadow: 0 0 0 2.5px #38bdf8; }
+ 
+    /* Google account card */
+    .google-account-card {
+      background: white;
+      border-radius: 14px;
+      padding: 12px 18px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(14,165,233,0.10);
+    }
+    .google-account-card:hover { box-shadow: 0 4px 16px rgba(14,165,233,0.18); }
+ 
+    /* Nav */
+    .navbar {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #bae6fd;
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+ 
+    /* Hero */
+    .hero-section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 60px 40px;
+      background: linear-gradient(155deg, #cffafe 0%, #a5f3fc 40%, #7dd3fc 100%);
+      position: relative;
+      overflow: hidden;
+    }
+ 
+    /* Game card */
+    .game-card {
+      background: linear-gradient(145deg, #e0f7ff, #bae6fd);
+      border-radius: 14px;
+      border: 1.5px solid #7dd3fc;
+      padding: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .game-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(14,165,233,0.22); }
+ 
+    /* Section */
+    .section { padding: 60px 40px; }
+ 
+    .divider-text {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .divider-line { flex: 1; height: 1px; background: rgba(14,165,233,0.2); }
+    .divider-label { font-size: 12px; color: #64748b; font-weight: 500; }
+ 
+    a { text-decoration: none; }
+  </style>
+</head>
+<body>
+ 
+<!-- ============================================================ -->
+<!--  LANDING PAGE                                                -->
+<!-- ============================================================ -->
+<div id="page-landing" class="page active" style="background:#f0f9ff;">
+ 
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#06b6d4,#0284c7);display:flex;align-items:center;justify-content:center;">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="10" rx="3" fill="white" fill-opacity="0.9"/>
+          <rect x="9" y="7" width="6" height="5" rx="2" fill="white" fill-opacity="0.6"/>
+          <circle cx="8" cy="15.5" r="1.5" fill="#0284c7"/>
+          <circle cx="16" cy="15.5" r="1.5" fill="#0284c7"/>
+        </svg>
+      </div>
+      <span class="font-game" style="font-size:16px;color:#0284c7;font-weight:900;letter-spacing:1px;">ITEM GOOD</span>
+    </div>
+    <div style="display:flex;gap:32px;">
+      <a href="#" style="font-size:13px;font-weight:600;color:#475569;">Beranda</a>
+      <a href="#" style="font-size:13px;font-weight:600;color:#475569;">Game</a>
+      <a href="#" style="font-size:13px;font-weight:600;color:#475569;">Top Up</a>
+      <a href="#" style="font-size:13px;font-weight:600;color:#475569;">Promo</a>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="showPage('login')" style="font-size:13px;font-weight:700;color:#0284c7;background:white;border:1.5px solid #7dd3fc;border-radius:50px;padding:8px 22px;cursor:pointer;">Masuk</button>
+      <button onclick="showPage('register')" class="btn-cyan-solid" style="padding:8px 22px;">Daftar</button>
+    </div>
+  </nav>
+ 
+  <!-- Hero -->
+  <section class="hero-section">
+    <div style="max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
+      <div>
+        <div style="display:inline-block;background:#0ea5e9;color:white;font-size:11px;font-weight:700;padding:5px 16px;border-radius:50px;margin-bottom:18px;">🎮 Platform Top Up #1 Indonesia</div>
+        <h1 class="font-game" style="font-size:38px;line-height:1.
+        2;color:#0c4a6e;font-weight:900;margin-bottom:16px;">
+          Top Up Game<br/><span style="color:#0ea5e9;">Cepat & Murah</span>
+        </h1>
+        <p style="color:#475569;font-size:15px;line-height:1.8;margin-bottom:28px;max-width:440px;">
+          Isi ulang diamond, voucher, dan item game favorit kamu dengan mudah. Proses otomatis 24 jam, 7 hari seminggu!
+        </p>
+        <div style="display:flex;gap:12px;margin-bottom:40px;">
+          <button onclick="showPage('register')" class="btn-cyan-solid" style="width:auto;padding:13px 32px;font-size:14px;">Mulai Sekarang</button>
+          <button style="background:white;border:2px solid #7dd3fc;border-radius:50px;padding:13px 32px;font-size:14px;font-weight:700;color:#0284c7;cursor:pointer;">Lihat Game</button>
+        </div>
+        <div style="display:flex;gap:36px;">
+          <div>
+            <p class="font-game" style="font-size:22px;font-weight:900;color:#0284c7;">500+</p>
+            <p style="font-size:12px;color:#64748b;font-weight:600;">Game Tersedia</p>
+          </div>
+          <div style="border-left:1px solid #bae6fd;padding-left:36px;">
+            <p class="font-game" style="font-size:22px;font-weight:900;color:#0284c7;">2 Juta+</p>
+            <p style="font-size:12px;color:#64748b;font-weight:600;">Pengguna Aktif</p>
+          </div>
+          <div style="border-left:1px solid #bae6fd;padding-left:36px;">
+            <p class="font-game" style="font-size:22px;font-weight:900;color:#0284c7;">99.9%</p>
+            <p style="font-size:12px;color:#64748b;font-weight:600;">Sukses Rate</p>
+          </div>
+        </div>
+      </div>
+      <!-- Hero visual -->
+      <div style="display:flex;justify-content:center;">
+        <div style="position:relative;">
+          <div style="width:340px;height:300px;background:rgba(255,255,255,0.5);border:2px solid #bae6fd;border-radius:24px;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px;">
+            <div style="background:linear-gradient(135deg,#06b6d4,#0284c7);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+              <span style="font-size:32px;">⚔️</span>
+              <p style="color:white;font-weight:700;font-size:11px;text-align:center;">Mobile Legends</p>
+            </div>
+            <div style="background:linear-gradient(135deg,#a855f7,#6366f1);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+              <span style="font-size:32px;">🎯</span>
+              <p style="color:white;font-weight:700;font-size:11px;text-align:center;">Free Fire</p>
+            </div>
+            <div style="background:linear-gradient(135deg,#f97316,#ef4444);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+              <span style="font-size:32px;">🏹</span>
+              <p style="color:white;font-weight:700;font-size:11px;text-align:center;">PUBG Mobile</p>
+            </div>
+            <div style="background:linear-gradient(135deg,#22c55e,#14b8a6);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+              <span style="font-size:32px;">🔮</span>
+              <p style="color:white;font-weight:700;font-size:11px;text-align:center;">Genshin Impact</p>
+            </div>
+          </div>
+          <!-- floating notif -->
+          <div style="position:absolute;bottom:-18px;right:-18px;background:white;border-radius:14px;padding:10px 16px;box-shadow:0 4px 20px rgba(14,165,233,0.2);display:flex;align-items:center;gap:10px;border:1px solid #e0f2fe;">
+            <div style="width:32px;height:32px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#16a34a;font-weight:800;font-size:14px;">✓</div>
+            <div>
+              <p style="font-weight:700;font-size:12px;color:#1e293b;">Transaksi Sukses!</p>
+              <p style="font-size:11px;color:#64748b;">86 diamonds terkirim</p>
+            </div>
+          </div>
+          /p>
+            </div>
+          </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- wave bottom -->
+    <svg style="position:absolute;bottom:-2px;left:0;width:100%;" viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 60 C400 10 1040 10 1440 60 L1440 60 L0 60Z" fill="#f0f9ff"/>
+    </svg>
+  </section>
+ 
+  <!-- Game Populer -->
+  <section class="section" style="background:#f0f9ff;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:36px;">
+        <h2 class="font-game" style="font-size:24px;color:#0c4a6e;font-weight:900;margin-bottom:8px;">Game Populer</h2>
+        <p style="color:#64748b;font-size:14px;font-weight:500;">Pilih game favoritmu dan top up sekarang</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;">
+        <div class="game-card"><div style="font-size:36px;margin-bottom:8px;">⚔️</div><p style="font-weight:700;font-size:12px;color:#0c4a6e;">Mobile Legends</p><p style="color:#0ea5e9;font-size:11px;margin-top:4px;font-weight:600;">Mulai 5rb</p></div>
+        <div class="game-card"><div style="font-size:36px;margin-bottom:8px;">🎯</div><p style="font-weight:700;font-size:12px;color:#0c4a6e;">Free Fire</p><p style="color:#0ea5e9;font-size:11px;margin-top:4px;font-weight:600;">Mulai 3rb</p></div>
+        <div class="game-card"><div style="font-size:36px;margin-bottom:8px;">🏹</div><p style="font-weight:700;font-size:12px;color:#0c4a6e;">PUBG Mobile</p><p style="color:#0ea5e9;font-size:11px;margin-top:4px;font-weight:600;">Mulai 10rb</p></div>
+        <div class="game-card"><div style="font-size:36px;margin-bottom:8px;">🔮</div><p style="font-weight:700;font-size:12px;color:#0c4a6e;">Genshin Impact</p><p style="color:#0ea5e9;font-size:11px;margin-top:4px;font-weight:600;">Mulai 20rb</p></div>
+        <div class="game-card"><div style="font-size:36px;margin-bottom:8px;">🐉</div><p style="font-weight:700;font-size:12px;color:#0c4a6e;">Honor of Kings</p><p style="color:#0ea5e9;font-size:11px;margin-top:4px;font-weight:600;">Mulai 7rb</p></div>
+        <div class="game-card"><div style="font-size:36px;margin-bottom:8px;">🎮</div><p style="font-weight:700;font-size:12px;color:#0c4a6e;">Valorant</p><p style="color:#0ea5e9;font-size:11px;margin-top:4px;font-weight:600;">Mulai 15rb</p></div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- Cara Top Up -->
+  <section class="section" style="background:white;">
+    <div style="max-width:900px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:36px;">
+        <h2 class="font-game" style="font-size:24px;color:#0c4a6e;font-weight:900;margin-bottom:8px;">Cara Top Up</h2>
+        <p style="color:#64748b;font-size:14px;">Hanya 4 langkah mudah!</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;">
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#06b6d4,#0284c7);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:white;font-weight:800;font-size:16px;">1</div>
+          <h3 style="font-weight:700;color:#0c4a6e;font-size:14px;margin-bottom:6px;">Pilih Game</h3>
+          <p style="color:#64748b;font-size:12px;line-height:1.6;">Cari game yang ingin kamu top up</p>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#06b6d4,#0284c7);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:white;font-weight:800;font-size:16px;">2</div>
+          <h3 style="font-weight:700;color:#0c4a6e;font-size:14px;margin-bottom:6px;">Masukkan ID</h3>
+          <p style="color:#64748b;font-size:12px;line-height:1.6;">Input ID akun game kamu</p>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#06b6d4,#0284c7);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:whi
+          te;font-weight:800;font-size:16px;">3</div>
+          <h3 style="font-weight:700;color:#0c4a6e;font-size:14px;margin-bottom:6px;">Pilih Nominal</h3>
+          <p style="color:#64748b;font-size:12px;line-height:1.6;">Pilih item atau jumlah yang diinginkan</p>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#06b6d4,#0284c7);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:white;font-weight:800;font-size:16px;">4</div>
+          <h3 style="font-weight:700;color:#0c4a6e;font-size:14px;margin-bottom:6px;">Bayar & Selesai</h3>
+          <p style="color:#64748b;font-size:12px;line-height:1.6;">Item langsung masuk ke akunmu!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- Footer -->
+  <footer style="background:#0c4a6e;padding:32px 40px;text-align:center;">
+    <span class="font-game" style="color:white;font-size:18px;font-weight:900;">ITEM GOOD</span>
+    <p style="color:#7dd3fc;font-size:12px;margin-top:8px;">© 2025 ITEM GOOD. Platform Top Up Game Terpercaya Indonesia.</p>
+    <div style="display:flex;justify-content:center;gap:28px;margin-top:14px;">
+      <a href="#" style="color:#7dd3fc;font-size:12px;">Tentang Kami</a>
+      <a href="#" style="color:#7dd3fc;font-size:12px;">Kontak</a>
+      <a href="#" style="color:#7dd3fc;font-size:12px;">FAQ</a>
+      <a href="#" style="color:#7dd3fc;font-size:12px;">Kebijakan Privasi</a>
+    </div>
+  </footer>
+</div>
+ 
+<!-- ============================================================ -->
+<!--  LOGIN - Desktop 51: Hi, Friends                            -->
+<!-- ============================================================ -->
+<div id="page-login" class="page">
+  <div class="split-layout">
+    <!-- LEFT -->
+    <div class="split-left">
+      <div class="topbar">
+        <div></div>
+        <span class="brand-badge">Item Good</span>
+      </div>
+      <div style="max-width:360px;">
+        <h1 style="font-size:28px;font-weight:800;color:#0c4a6e;margin-bottom:4px;">Hi, Friends</h1>
+        <p style="font-size:13px;font-weight:700;color:#0ea5e9;margin-bottom:28px;">Welcome to Item Good</p>
+ 
+        <div style="margin-bottom:14px;">
+          <input type="email" class="field-input" placeholder="Email atau Username" />
+        </div>
+        <div style="margin-bottom:6px;">
+          <input type="password" class="field-input" placeholder="Password" />
+        </div>
+        <div style="text-align:right;margin-bottom:20px;">
+          <a href="#" onclick="showPage('recovery')" style="font-size:11px;color:#0ea5e9;font-weight:600;">Forgot password?</a>
+        </div>
+ 
+        <div class="divider-text">
+          <div class="divider-line"></div>
+          <span class="divider-label">or</span>
+          <div class="divider-line"></div>
+        </div>
+ 
+        <div style="margin:16px 0;">
+          <button onclick="showPage('google')" class="btn-white" style="display:flex;align-items:center;justify-content:center;gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Login with Google
+          </button>
+        </div>
+ 
+        <button onclick="showPage('landing')" class="btn-cyan-solid" style="width:100%;margin-top:8px;">Login</button>
+ 
+        <p style="text-align:center;margin-top:20px;font-size:12px;color:#64748b;">
+          Don't have account? <a href="#" onclick="showPage('register')"
+          showPage(register) style="color:#0ea5e9;font-weight:700;">sign up</a>
+        </p>
+      </div>
+    </div>
+    <!-- RIGHT decorative -->
+    <div class="split-right"></div>
+  </div>
+</div>
+
+<div id="page-register" class="page">
+  <div class="split-layout">
+    <div class="split-left">
+      <div class="topbar">
+        <button class="back-btn" onclick="showPage('login')">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#0284c7" stroke-width="2.5"><path d="M19 12H5M5 12l7-7M5 12l7 7"/></svg>
+        </button>
+        <span class="brand-badge">Item Good</span>
+      </div>
+      <div style="max-width:380px;">
+        <h1 style="font-size:24px;font-weight:800;color:#0c4a6e;margin-bottom:24px;">Buat Akun Baru</h1>
+ 
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+          <div>
+            <label class="field-label">Full Name</label>
+            <input type="text" class="field-input" placeholder="Nama depan" />
+          </div>
+          <div>
+            <label class="field-label">Last Name</label>
+            <input type="text" class="field-input" placeholder="Nama belakang" />
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label class="field-label">Email</label>
+          <input type="email" class="field-input" placeholder="email@example.com" />
+        </div>
+        <div style="margin-bottom:20px;">
+          <label class="field-label">Phone Number</label>
+          <input type="tel" class="field-input" placeholder="08xxxxxxxxxx" />
+        </div>
+ 
+        <button onclick="showPage('verification')" class="btn-cyan-solid" style="width:100%;padding:12px;">Register</button>
+ 
+        <p style="text-align:center;margin-top:16px;font-size:12px;color:#64748b;">
+          Don't have account? <a href="#" onclick="showPage('login')" style="color:#0ea5e9;font-weight:700;">sign up</a>
+        </p>
+      </div>
+    </div>
+    <div class="split-right"></div>
+  </div>
+</div>
+ 
+<!-- ============================================================ -->
+<!--  GOOGLE SIGN IN - Desktop 6                                  -->
+<!-- ============================================================ -->
+<div id="page-google" class="page">
+  <div class="split-layout">
+    <div class="split-left">
+      <div class="topbar">
+        <button class="back-btn" onclick="showPage('login')">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#0284c7" stroke-width="2.5"><path d="M19 12H5M5 12l7-7M5 12l7 7"/></svg>
+        </button>
+        <span class="brand-badge">Item Good</span>
+      </div>
+      <div style="max-width:380px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          <h1 style="font-size:20px;font-weight:800;color:#0c4a6e;">Sign in with Google</h1>
+        </div>
+ 
+        <div style="text-align:center;margin:24px 0 8px;">
+          <p style="font-size:15px;font-weight:700;color:#0c4a6e;">Choose an account</p>
+          <p style="font-size:12px;color:#64748b;margin-top:4px;">to continue to Company</p>
+        </div>
+ 
+        <div style="margin-top:16px;">
+          <div class="google-account-card">
+            <p style="font-size:12px;font-weight:600;color:#0c4a6e;margin-bottom:2px;">Account name</p>
+            <p style="font-size:12px;color:#64748b;">email@gmail.com</p>
+          </div>
+          <div class="google-account-card">
+            <p style="font-size:12px;font-weight:600;color:#0c4a6e;margin-bottom:2px;">Account Name</p>
+            <p style="font-size:12px;color:#64748b;">email@gmail.com</p>
+          </div>
+          <div class="google-account-card" style="text-align:center;">
+            <p style="font-size:12px;font-weight:600;color:#0ea5e9;">Use another account</p>
+          </div>
+        </div>
+ 
+        <p style="font-size:11px;color:#94a3b8;line-height:1.6;margin:16px 0;text-align:center;">
+          To continue, Google will share your name, email address, language preference, and profile picture with company. Before using this app, you can review Company's policy.
+        </p>
+ 
+        <button onclick="showPage('login')" style="background:none;border:none;font-size:12px;font-weight:700;color:#0ea5e9;cursor:pointer;width:100%;text-align:center;padding:8px;">Back To Login</button>
+      </div>
+    </div>
+    <div class="split-right"></div>
+  </div>
+</div>
+ 
+<div id="page-verification" class="page">
+  <div class="split-layout">
+    <div class="split-left">
+      <div class="topbar">
+        <button class="back-btn" onclick="showPage('register')">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#0284c7" stroke-width="2.5"><path d="M19 12H5M5 12l7-7M5 12l7 7"/></svg>
+        </button>
+        <span class="brand-badge">Item Good</span>
+      </div>
+      <div style="max-width:380px;">
+        <h1 style="font-size:22px;font-weight:800;color:#0c4a6e;margin-bottom:8px;">Verification</h1>
+        <p style="font-size:12px;color:#64748b;margin-bottom:36px;line-height:1.7;">Masukkan kode verifikasi yang sudah di kirimkan<br/>ke alamat emailmu</p>
+ 
+        <!-- OTP inputs -->
+        <div style="display:flex;gap:16px;margin-bottom:10px;">
+          <input type="text" maxlength="1" class="otp-input" oninput="moveOTP(this,1)" />
+          <input type="text" maxlength="1" class="otp-input" oninput="moveOTP(this,2)" />
+          <input type="text" maxlength="1" class="otp-input" oninput="moveOTP(this,3)" />
+          <input type="text" maxlength="1" class="otp-input" oninput="moveOTP(this,4)" />
+        </div>
+ 
+        <p style="font-size:11px;color:#94a3b8;margin-bottom:28px;">
+          Belum Menerima Kode? <a href="#" style="color:#0ea5e9;font-weight:700;">Resend!</a>
+        </p>
+ 
+        <button onclick="showPage('new-password')" class="btn-cyan-solid" style="width:100%;padding:12px;">Verify</button>
+      </div>
+    </div>
+    <div class="split-right"></div>
+  </div>
+</div>
+ 
+<div id="page-new-password" class="page">
+  <div class="split-layout">
+    <div class="split-left">
+      <div class="topbar">
+        <button class="back-btn" onclick="showPage('verification')">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#0284c7" stroke-width="2.5"><path d="M19 12H5M5 12l7-7M5 12l7 7"/></svg>
+        </button>
+        <span class="brand-badge">Item Good</span>
+      </div>
+      <div style="max-width:380px;">
+        <h1 style="font-size:22px;font-weight:800;color:#0c4a6e;margin-bottom:8px;">Buat Pasword Baru</h1>
+        <p style="font-size:12px;color:#64748b;margin-bottom:28px;line-height:1.7;">Buat pasword dengan kombinasi<br/>huruf,angka dan simbol menarik</p>
+ 
+        <div style="margin-bottom:14px;">
+          <label class="field-label">Password baru</label>
+          <input type="password" class="field-input" placeholder="Masukkan password baru" />
+        </div>
+        <div style="margin-bottom:28px;">
+          <label class="field-label">Konfirmasi Password</label>
+          <input type="password" class="field-input" placeholder="Ulangi password baru" />
+        </div>
+ 
+        <button onclick="showPage('login')" class="btn-cyan-solid" style="width:100%;padding:12px;">Verify</button>
+      </div>
+    </div>
+    <div class="split-right"></div>
+  </div>
+</div>
+ 
+<!-- ============================================================ -->
+<!--  RECOVERY PASSWORD - Desktop 49                              -->
+<!--
+============================================================ -->
+<div id="page-recovery" class="page">
+  <div class="split-layout">
+    <div class="split-left">
+      <div class="topbar">
+        <button class="back-btn" onclick="showPage('login')">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#0284c7" stroke-width="2.5"><path d="M19 12H5M5 12l7-7M5 12l7 7"/></svg>
+        </button>
+        <span class="brand-badge">Item Good</span>
+      </div>
+      <div style="max-width:380px;">
+        <h1 style="font-size:22px;font-weight:800;color:#0c4a6e;margin-bottom:4px;">Recovery Password</h1>
+        <p style="font-size:12px;color:#64748b;margin-bottom:4px;">Masukkan Alamat E-Mail</p>
+        <p style="font-size:12px;color:#64748b;margin-bottom:24px;">Kamu Di Sini</p>
+ 
+        <div style="margin-bottom:16px;">
+          <label class="field-label">Email</label>
+          <input type="email" class="field-input" placeholder="email@example.com" />
+        </div>
+ 
+        <button onclick="showPage('verification')" class="btn-cyan-solid" style="width:100%;padding:12px;margin-bottom:14px;">Send</button>
+ 
+        <button onclick="showPage('login')" style="background:none;border:none;font-size:12px;font-weight:700;color:#0ea5e9;cursor:pointer;width:100%;text-align:center;padding:8px;">Back To Login</button>
+      </div>
+    </div>
+    <div class="split-right"></div>
+  </div>
+</div>
+ 
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+ 
+  // OTP auto-focus next
+  const otpInputs = document.querySelectorAll('.otp-input');
+  otpInputs.forEach((input, i) => {
+    input.addEventListener('input', () => {
+      if (input.value && i < otpInputs.length - 1) otpInputs[i + 1].focus();
+    });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !input.value && i > 0) otpInputs[i - 1].focus();
+    });
+  });
+</script>
+</body>
+</html>
